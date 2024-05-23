@@ -1,8 +1,8 @@
 import React from "react";
 import { hydrateRoot } from "react-dom/client";
 import { Layout } from "./layout";
-import { List } from "./pages/list";
-import { Detail } from "./pages/details";
+import  List  from "./pages/list";
+import  Detail  from "./pages/details";
 
 const searchParams = new URLSearchParams(location.search);
 const breed = searchParams.get("breed");

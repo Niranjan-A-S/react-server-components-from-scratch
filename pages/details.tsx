@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { REMOTE_URL } from "../utils";
 
-export const Detail = ({ breed }: { breed: string }) => {
+const Detail = ({ breed }: { breed: string }) => {
     const [imageUrl, setImageUrl] = useState("");
 
     useEffect(() => {
@@ -22,3 +22,5 @@ export const Detail = ({ breed }: { breed: string }) => {
         </div>
     );
 };
+
+export default Detail;
