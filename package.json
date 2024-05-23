@@ -1,6 +1,12 @@
 {
   "scripts": {
-    "dev": "vite"
+    "dev": "vite",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:server": "esbuild --platform=node --bundle server.tsx --outfile=dist/server.js",
+    "build:client": "esbuild --bundle index.tsx --outfile=dist/client.js",
+    "build:tsc": "tsc",
+    "build": "run-p build:*",
+    "start": "node dist/server"
   },
   "dependencies": {
     "express": "^4.19.2",
