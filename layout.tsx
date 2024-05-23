@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Layout = ({bgColor, children}) => <html lang="en">
+export const Layout = ({bgColor, children}: any) => <html lang="en">
 <head>
   <meta charSet="utf-8" />
   <title>Teju RSC</title>
