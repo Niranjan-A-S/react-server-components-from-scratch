@@ -4,6 +4,11 @@ import path from "path";
 import { Layout } from "./layout";
 import React from "react";
 
+const sanitizeJSON = (key: any, value: any) => {
+    if (value === Symbol.for("react.element")) return "$";
+    return value;
+}
+
 const turnJSXIntoClientObject: any = async (jsx: any) => {
     if (!jsx) return null;
 
@@ -45,12 +50,22 @@ app.get("/:path", async (req, res) => {
     const page = await import(path.join(process.cwd(), 'dist', 'pages', req.params.path));
     const Component = page.default;
     const clientJSX = await turnJSXIntoClientObject(
-        <Layout bgColor="white">
-            <Component {...req.query}/>
+        <Layout bgColor={req.params.path === "list" ? "white" : "black"}>
+            <Component {...req.query} />
         </Layout>
     );
+
+    if (req.query.jsx === "true") {
+        return res.end(JSON.stringify(clientJSX, sanitizeJSON));
+    }
+
     const html = renderToString(clientJSX);
-    res.end(html);
+    res.end(`${html}
+        <script >
+            window.__rscOutput = \`${JSON.stringify(clientJSX, sanitizeJSON)}\`
+        </script>
+        <script src="./client.js"></script>
+    `);
 });
 
 

@@ -1,15 +1,28 @@
-import React from "react";
 import { hydrateRoot } from "react-dom/client";
-import { Layout } from "./layout";
-import  List  from "./pages/list";
-import Detail from "./pages/detail";
 
-const searchParams = new URLSearchParams(location.search);
-const breed = searchParams.get("breed");
+const reviveJSON = (key: any, value: any) => {
+    if (value === '$') return Symbol.for("react.element");
+    return value
+}
 
 const root = hydrateRoot(
     document,
-    <Layout bgColor="white">
-        {location.pathname === "/list" ? <List /> : <Detail breed={breed || ''} />}
-    </Layout>
+    //@ts-ignore
+    JSON.parse(window.__rscOutput, reviveJSON)
 );
+
+window.addEventListener("click", (event: any) => {
+    if (event.target.tagName === 'A') {
+        event.preventDefault();
+        window.history.pushState(null, "", event.target.href);
+        navigate(event.target.href);
+    }
+});
+
+async function navigate(to: string) {
+    const nextPage = await fetch(`${to}&jsx=true`)
+        .then(res => res.text())
+        .then(jsx => JSON.parse(jsx, reviveJSON));
+
+    root.render(nextPage);
+}
