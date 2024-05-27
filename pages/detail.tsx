@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { REMOTE_URL } from "../utils";
 
-const Detail = ({ breed }: { breed: string }) => {
-    const [imageUrl, setImageUrl] = useState("");
+const Detail: any = async ({ breed }: { breed: string }) => {
 
-    useEffect(() => {
-        fetch(`${REMOTE_URL}/api/breed/${breed}/images/random`)
+    const imageUrl = await fetch(`${REMOTE_URL}/api/breed/${breed}/images/random`)
             .then((r) => r.json())
-            .then((data) => setImageUrl(data.message));
-    }, []);
-
-    if (!breed) {
-        return <h1>No breed found</h1>;
-    }
+        .then((data) => data.message);
 
     return (
         <div>
