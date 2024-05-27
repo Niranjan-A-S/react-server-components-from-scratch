@@ -1,32 +1,18 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { REMOTE_URL } from "../utils";
 
-const List = () => {
-    const [breeds, setBreeds] = React.useState<any[]>([]);
-    const [images, setImages] = React.useState<any[]>([]);
+const List: any = async () => {
+    const breeds = await fetch(`${REMOTE_URL}/api/breeds/list/all`)
+        .then((r) => r.json())
+        .then((data) => Object.keys(data.message))
 
-    useEffect(() => {
-        fetch(`${REMOTE_URL}/api/breeds/list/all`)
-            .then((r) => r.json())
-            .then((data) => Object.keys(data.message))
-            .then(async (breeds) => {
-                console.log(breeds);
-                return [
-                    breeds,
-                    await Promise.all(
-                        breeds.map((b) =>
-                            fetch(`${REMOTE_URL}/api/breed/${b}/images/random`)
-                                .then((r) => r.json())
-                                .then((data) => data.message)
-                        )
-                    ),
-                ];
-            })
-            .then(([breeds, images]) => {
-                setBreeds(breeds);
-                setImages(images);
-            });
-    }, []);
+    const images = await Promise.all(
+        breeds.map((b) =>
+            fetch(`${REMOTE_URL}/api/breed/${b}/images/random`)
+                .then((r) => r.json())
+                .then((data) => data.message)
+        )
+    );
 
     return (
         <div>
